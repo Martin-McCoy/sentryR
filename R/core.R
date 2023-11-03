@@ -182,12 +182,7 @@ prepare_payload <- function(...) {
     event_id = uuid
   )
 
-  overrides <- list(...)
 
-  system_parameters <- utils::modifyList(
-    system_parameters,
-    overrides
-  )
 
   if (!is.null(.sentry_env$payload_skeleton)) {
     with_all_fields <- utils::modifyList(
@@ -204,10 +199,18 @@ prepare_payload <- function(...) {
   # the stacktrace as a data.frame/tibble
   without_nulls$exception$stacktrace <- system_parameters$exception$stacktrace
 
+  overrides <- list(...)
+
+  without_nulls <- utils::modifyList(
+    without_nulls,
+    overrides
+  )
+
   payload <- jsonlite::toJSON(
     without_nulls,
     auto_unbox = TRUE,
-    na = "null"
+    na = "null",
+    null = 'null'
   )
 
   return(payload)
