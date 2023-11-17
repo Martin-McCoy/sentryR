@@ -303,7 +303,7 @@ capture_exception <- function(error, ..., level = "error") {
 
   # tibble allows list-columns, which jsonlite translate to array of maps
   exception_payload <- list(
-    type = error_type,
+    type = paste0(error_type,":", substr(error$message, 1, 50)),
     value = error_message,
     stacktrace = list(
       frames = stacktrace
